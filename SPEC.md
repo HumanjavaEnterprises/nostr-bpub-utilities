@@ -49,6 +49,30 @@ An explicit `page`/`registry` overrides. With neither `page` nor `hostBase`, `pa
 Flow: `build → bindEntity → signManifest` (in the enclave) → publish the event → anyone
 `verifyManifest`s it. Verification needs no host — only the event and the signature.
 
+## The signed event (wire format)
+
+A signed manifest is a NIP-01 event. An interoperable implementation MUST produce and read
+it as follows:
+
+| Field | Value |
+|---|---|
+| `kind` | `30078` (NIP-78 app-specific, parameterized-replaceable) |
+| `tags` | exactly one `d` tag: `["d", <slug>]`, where `<slug>` is the business slug |
+| `content` | the manifest as a JSON string — **this exact byte string is what is signed** |
+| `id`, `sig` | computed per NIP-01 over `[0, pubkey, created_at, kind, tags, content]`, schnorr/BIP-340 |
+
+**Serialization is byte-exact, not structural.** The signature commits to the precise
+`content` string, so `verifyManifest` recomputes the id over the event's *transmitted*
+`content` bytes and re-checks the signature — it never rebuilds the manifest and re-serializes
+it. Two verifiers given the same event therefore always agree. A producer that wants a second
+implementation to reproduce an identical `id` for the same logical manifest must emit the same
+bytes; this library emits object keys in the field order the schema lists them. Consumers that
+only need to *verify* a received event do not depend on key order at all.
+
+**Identity binding.** `verifyManifest` additionally asserts the manifest's
+`identity.nostr.npub` equals the npub of the signing key — a card cannot claim an identity it
+did not sign with.
+
 ## The key boundary
 Signing touches a private key, so `signManifest` runs **enclave/client-side only** and
 outputs only public, signed material. Everything else (`build`, `validate`, `bind`,

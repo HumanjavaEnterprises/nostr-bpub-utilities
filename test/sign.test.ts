@@ -164,6 +164,17 @@ describe('bindEntity', () => {
     expect(bound.channels.pay?.asset).toBe('BTC');
   });
 
+  it('SECURITY: payAddress without payAsset is refused (no silent BTC default)', () => {
+    const base = buildBusinessManifest({ slug: 'joes', name: 'Joe' });
+    // @ts-expect-error — payAsset intentionally omitted to prove the runtime guard
+    expect(() => bindEntity(base, { npub: SIGNER.npub, payAddress: 'bc1qexampleaddr' })).toThrow(BindingError);
+  });
+
+  it('SECURITY: deriveZpubAddress refuses a missing asset (no silent BTC default)', async () => {
+    // @ts-expect-error — asset intentionally omitted to prove the runtime guard
+    await expect(deriveZpubAddress(ZPUB)).rejects.toBeInstanceOf(BindingError);
+  });
+
   it('SECURITY: a raw zpub is NEVER embedded — bindEntity throws and writes nothing', () => {
     const base = buildBusinessManifest({ slug: 'joes', name: 'Joe' });
     let thrown: unknown;

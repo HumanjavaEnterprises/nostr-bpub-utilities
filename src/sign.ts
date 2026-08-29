@@ -121,12 +121,21 @@ export function bindEntity(manifest: BusinessManifest, opts: BindOptions): Busin
           'single derived receiving ADDRESS, not an extended key. Nothing was written.',
       );
     }
+    // `payAsset` is REQUIRED with a payAddress. A silent default would let a BTC address
+    // be labelled LTC (or vice versa) in a public, machine-read manifest — a paying agent
+    // could then send funds on the wrong chain. Make the caller state the chain.
+    if (opts.payAsset !== 'BTC' && opts.payAsset !== 'LTC') {
+      throw new BindingError(
+        "bindEntity: payAsset is required with payAddress — pass { payAsset: 'BTC' | 'LTC' }. " +
+          'Nothing was written.',
+      );
+    }
     const prevPay = next.channels.pay ?? {};
     next.channels.pay = {
       ...prevPay,
       via: opts.payVia ?? 'onchain',
       endpoint: opts.payAddress,
-      asset: opts.payAsset ?? 'BTC',
+      asset: opts.payAsset,
     };
   }
 
@@ -143,15 +152,18 @@ export function bindEntity(manifest: BusinessManifest, opts: BindOptions): Busin
  * `zpub`. Pure/public: no seed, no private key.
  *
  * @param zpub - an extended PUBLIC key
- * @param asset - `'BTC'` (default) or `'LTC'`
+ * @param asset - `'BTC'` or `'LTC'` — REQUIRED; the chain is never guessed
  * @param opts - optional `{ index, change }` (defaults `0` / `0`)
  * @returns the first (or requested) receiving address
  */
 export async function deriveZpubAddress(
   zpub: string,
-  asset: 'BTC' | 'LTC' = 'BTC',
+  asset: 'BTC' | 'LTC',
   opts: { index?: number; change?: 0 | 1 } = {},
 ): Promise<string> {
+  if (asset !== 'BTC' && asset !== 'LTC') {
+    throw new BindingError("deriveZpubAddress: asset is required — pass 'BTC' or 'LTC'. The chain is never guessed.");
+  }
   let peer: any;
   try {
     // Indirect specifier: resolved only at runtime (the peer is optional and may be
