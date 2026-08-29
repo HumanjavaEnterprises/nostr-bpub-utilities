@@ -201,7 +201,7 @@ describe('bindEntity', () => {
   });
 
   it('deriveZpubAddress throws a clear error (never returns the raw zpub) when the peer is absent', async () => {
-    // nostr-zpub-utilities is not installed in this repo → derivation is unavailable.
+    // nostr-zpub-utils is not installed in this repo → derivation is unavailable.
     await expect(deriveZpubAddress(ZPUB, 'BTC')).rejects.toBeInstanceOf(BindingError);
     await expect(deriveZpubAddress(ZPUB, 'BTC')).rejects.not.toThrow(ZPUB);
   });

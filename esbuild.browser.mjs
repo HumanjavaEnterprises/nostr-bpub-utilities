@@ -13,7 +13,7 @@ const result = await build({
   target: ['es2020'],
   platform: 'browser',
   // The optional peer is resolved at runtime via dynamic import(); never bundled.
-  external: ['nostr-zpub-utilities'],
+  external: ['nostr-zpub-utils'],
   define: {
     'process.env.NODE_ENV': '"production"',
     global: 'globalThis',
