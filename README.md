@@ -9,6 +9,10 @@ hands, so each adopting platform supplies its own host.
 Part of the `nostr-*` utilities set: `nostr-agentic-identity` (identity),
 `nostr-zpub-utilities` (BTC/LTC receiving keys), and this — the business manifest.
 
+> **`bpub` is the format name, not a bech32 prefix.** The manifest is versioned
+> `bpub-business/0.1`; it is not an encoding like `npub`/`nsec`. The npm package and repo are
+> named `nostr-business-manifest` for exactly that reason — only the *format* keeps the `bpub-` name.
+
 > The file an agent reads instead of emailing a business: its identity and its
 > verb-typed, transactable **channels** (`book / pay / support / ask`), typically served
 > at `/.well-known/info.json` — and, optionally, signed by the business's own key so any
