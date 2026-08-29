@@ -10,8 +10,8 @@
  * @packageDocumentation
  */
 
-import { BPUB_BUSINESS, VERSION, LICENSE, ATTRIBUTION_NOTICE, DEFAULT_REGISTRY } from './schema.js';
-import type { BuildInput, BusinessManifest, Channel, Channels, Link } from './types.js';
+import { BPUB_BUSINESS, VERSION, LICENSE, ATTRIBUTION_NOTICE } from './schema.js';
+import type { BuildInput, BusinessManifest, Channel, Channels, Link, Resilience } from './types.js';
 
 /**
  * Map a flat link list (directory / links style) to verb-typed channels.
@@ -95,7 +95,8 @@ export function buildBusinessManifest(input: BuildInput = {}): BusinessManifest 
     npub = null,
     nip05 = null,
     page,
-    registry = DEFAULT_REGISTRY,
+    hostBase,
+    registry,
     links = [],
     channels: explicit = null,
     hours = null,
@@ -103,7 +104,15 @@ export function buildBusinessManifest(input: BuildInput = {}): BusinessManifest 
     website = null,
   } = input;
 
-  const pageUrl = page || (slug ? `https://${slug}.bpub.app` : null);
+  // The library is host-agnostic: it never fabricates a domain. A page is derived
+  // from a slug ONLY when the caller supplies its own `hostBase` (a bare host like
+  // "acme.example"). With neither an explicit `page` nor a `hostBase`, `page` is null.
+  const pageUrl = page || (slug && hostBase ? `https://${slug}.${hostBase}` : null);
+
+  // Registry: use the explicit value; else default to the caller's own host when a
+  // `hostBase` is given; else omit it entirely (never emit a hardcoded product domain).
+  let registryValue: string | undefined = registry;
+  if (registryValue === undefined && hostBase) registryValue = `https://${hostBase}`;
   const ch: Record<string, Channel | null> = explicit || linksToChannels(links, { pageUrl });
 
   const websiteUrl =
@@ -122,6 +131,12 @@ export function buildBusinessManifest(input: BuildInput = {}): BusinessManifest 
   };
   // optional extras only when present
   for (const k of ['menu', 'order', 'quote']) if (ch[k]) channels[k] = ch[k];
+
+  // Build resilience with the canonical → registry → triangulation key order, and
+  // include `registry` only when it is defined (omitted entirely otherwise).
+  const resilience: Resilience = { canonical: pageUrl } as Resilience;
+  if (registryValue !== undefined) resilience.registry = registryValue;
+  resilience.triangulation = { page: pageUrl, website: websiteUrl, social: socialUrl };
 
   return {
     schema: BPUB_BUSINESS,
@@ -154,10 +169,6 @@ export function buildBusinessManifest(input: BuildInput = {}): BusinessManifest 
     channels,
     hours: hours || null,
     agents: { policy: 'read-and-transact', transact_via: 'channels' },
-    resilience: {
-      canonical: pageUrl,
-      registry,
-      triangulation: { page: pageUrl, website: websiteUrl, social: socialUrl },
-    },
+    resilience,
   };
 }

@@ -81,10 +81,11 @@ export interface Channels {
   [k: string]: Channel | null | undefined;
 }
 
-/** The `resilience` block: canonical URL, registry, and the triangulation set. */
+/** The `resilience` block: canonical URL, an optional registry, and triangulation. */
 export interface Resilience {
   canonical: string | null;
-  registry: string;
+  /** Present only when a `registry` or `hostBase` was supplied; omitted otherwise. */
+  registry?: string;
   triangulation: {
     page: string | null;
     website: string | null;
@@ -125,6 +126,15 @@ export interface BuildInput {
   npub?: string | null;
   nip05?: string | null;
   page?: string | null;
+  /**
+   * A bare host the caller owns (e.g. `"acme.example"`). When a `slug` is given but
+   * no explicit `page`, the page is derived as `https://${slug}.${hostBase}`. Also
+   * seeds `resilience.registry` (`https://${hostBase}`) when `registry` is absent.
+   * The library never fabricates a domain — with no `hostBase` and no `page`, `page`
+   * stays null and `registry` is omitted.
+   */
+  hostBase?: string;
+  /** Explicit registry URL for `resilience.registry`. Omitted when absent and no `hostBase`. */
   registry?: string;
   links?: Link[];
   channels?: Record<string, Channel | null> | null;

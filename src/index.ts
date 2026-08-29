@@ -47,7 +47,6 @@ export {
   CHANNEL_VERBS,
   CHANNEL_VIA,
   CORE_CHANNELS,
-  DEFAULT_REGISTRY,
 } from './schema.js';
 
 // ── Layer 1 — the manifest (pure data, safe anywhere) ────────────────────────────

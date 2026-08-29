@@ -27,11 +27,12 @@ import {
 // @ts-expect-error — plain JS module, no types.
 import * as legacy from './legacy/index.js';
 
-// Every fixture passes `generated_by` explicitly — mirroring how the real emitters
-// call the builder. The builder's DEFAULT generated_by is intentionally changed in
-// this release (see the dedicated default test below), so the default is deliberately
-// kept out of the byte-for-byte legacy comparison; the mapping logic is what is pinned.
-// Fixtures use obviously-fictional example.* domains only.
+// Every fixture passes `generated_by`, an explicit `page`, and an explicit `registry`
+// — mirroring how a real adopting platform calls the builder. The builder's DEFAULTS
+// (generated_by; the slug→page derivation, now gated on a caller-supplied `hostBase`;
+// the omitted registry) changed in this release, so those defaults are deliberately
+// kept OUT of the byte-for-byte legacy comparison and are pinned by dedicated tests
+// below. Every domain is an obviously-fictional example.* host — never a live product.
 /** A representative fixture set spanning every builder branch. */
 const FIXTURES: Record<string, any> = {
   'links-style (directory shape)': {
@@ -47,6 +48,8 @@ const FIXTURES: Record<string, any> = {
     languages: ['en', 'fr'],
     updated: '2026-06-21',
     generated_by: 'directory',
+    page: 'https://joes.directory.example.com',
+    registry: 'https://directory.example.com',
     npub: 'npub1xyz',
     links: [
       { kind: 'website', url: 'https://joes.example.com' },
@@ -59,6 +62,7 @@ const FIXTURES: Record<string, any> = {
   'explicit-channels (KV shape) + branding icon': {
     name: 'Sunny Tanning',
     page: 'https://sunny.example.com',
+    registry: 'https://registry.example.com',
     verified: true,
     generated_by: 'test-emitter',
     channels: {
@@ -71,12 +75,14 @@ const FIXTURES: Record<string, any> = {
   'hours carried through': {
     name: 'X',
     page: 'https://x.example.com',
+    registry: 'https://registry.example.com',
     generated_by: 'test-emitter',
     hours: [{ day: 'mon', open: '09:00', close: '17:00', tz: 'America/Vancouver' }],
   },
   'interac flagship (spec example)': {
     name: 'Sunny Tanning',
     page: 'https://sunny.example.com',
+    registry: 'https://registry.example.com',
     generated_by: 'test-emitter',
     channels: {
       book: { via: 'voice', endpoint: '+12505550123' },
@@ -85,16 +91,22 @@ const FIXTURES: Record<string, any> = {
       ask: { via: 'mcp', endpoint: 'https://sunny.example.com/mcp' },
     },
   },
-  'name-only': { name: 'Solo Co', generated_by: 'test-emitter' },
+  'name-only': {
+    name: 'Solo Co',
+    generated_by: 'test-emitter',
+    registry: 'https://registry.example.com',
+  },
   'nip05 only (nostr block present, npub null)': {
     name: 'Y',
     nip05: 'y@example.com',
     page: 'https://y.example.com',
+    registry: 'https://registry.example.com',
     generated_by: 'test-emitter',
   },
   'logo + colors branding, explicit registry': {
     name: 'Brandy',
     slug: 'brandy',
+    page: 'https://brandy.example.com',
     generated_by: 'test-emitter',
     logo: 'https://cdn.example.com/logo.png',
     colors: { primary: '#000', accent: '#fff' },
@@ -103,6 +115,7 @@ const FIXTURES: Record<string, any> = {
   'optional extras (menu/order/quote) present': {
     name: 'Diner',
     page: 'https://diner.example.com',
+    registry: 'https://registry.example.com',
     generated_by: 'test-emitter',
     channels: {
       menu: { via: 'web', endpoint: 'https://diner.example.com/menu' },
@@ -113,6 +126,8 @@ const FIXTURES: Record<string, any> = {
   'explicit website + social passthrough': {
     name: 'Z',
     slug: 'zed',
+    page: 'https://zed.example.com',
+    registry: 'https://registry.example.com',
     generated_by: 'test-emitter',
     website: 'https://zed.example.com',
     social: 'https://social.example.com/zed',
@@ -143,11 +158,49 @@ describe('builder parity — TS port === legacy JS (byte-identical)', () => {
     expect(buildBusinessManifest({ name: 'X' }).meta.generated_by).toBe('nostr-bpub-utilities');
     // The preserved legacy oracle still shows the old default — documenting the change.
     expect(legacy.buildBusinessManifest({}).meta.generated_by).toBe('info-json');
-    // With generated_by supplied explicitly (as emitters do), TS === legacy byte-for-byte.
-    const explicit = { name: 'X', page: 'https://x.example.com', generated_by: 'some-emitter' };
+    // With page + registry + generated_by supplied explicitly (as adopters do), the two
+    // implementations are byte-for-byte identical — the mapping logic did not drift.
+    const explicit = {
+      name: 'X',
+      page: 'https://x.example.com',
+      registry: 'https://registry.example.com',
+      generated_by: 'some-emitter',
+    };
     expect(JSON.stringify(buildBusinessManifest(explicit))).toBe(
       JSON.stringify(legacy.buildBusinessManifest(explicit)),
     );
+  });
+
+  it('host-agnostic: DEFAULT output fabricates NO domain and contains no hardcoded product host', () => {
+    // A slug is given but no `page` and no `hostBase` → the library must NOT invent a
+    // domain, and must never emit the old hardcoded product registry.
+    const m = buildBusinessManifest({ slug: 'joes', name: 'Joe’s Plumbing' });
+    expect(m.identity.page).toBeNull();
+    expect(m.resilience.canonical).toBeNull();
+    expect(m.resilience).not.toHaveProperty('registry'); // omitted, not defaulted
+    const bytes = JSON.stringify(m);
+    expect(bytes).not.toContain('bpub.app'); // no live product domain
+    expect(bytes).not.toContain('joes.'); // no fabricated slug subdomain
+    // The legacy oracle, by contrast, still hardcodes the product host (documents the change).
+    expect(JSON.stringify(legacy.buildBusinessManifest({ slug: 'joes', name: 'Joe’s Plumbing' }))).toContain(
+      'bpub.app',
+    );
+  });
+
+  it('hostBase (caller-supplied) drives the slug→page derivation and the registry default', () => {
+    const m = buildBusinessManifest({ slug: 'acme', name: 'Acme', hostBase: 'acme.example' });
+    expect(m.identity.page).toBe('https://acme.acme.example');
+    expect(m.resilience.canonical).toBe('https://acme.acme.example');
+    expect(m.resilience.registry).toBe('https://acme.example'); // seeded from hostBase
+    expect(m.resilience.triangulation.page).toBe('https://acme.acme.example');
+    // An explicit registry still wins over the hostBase-derived one.
+    const m2 = buildBusinessManifest({
+      slug: 'acme',
+      name: 'Acme',
+      hostBase: 'acme.example',
+      registry: 'https://registry.example.com',
+    });
+    expect(m2.resilience.registry).toBe('https://registry.example.com');
   });
 
   const LINK_FIXTURES: Record<string, { links: any[]; pageUrl?: string }> = {

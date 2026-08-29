@@ -44,6 +44,3 @@ export const CHANNEL_VIA = ['web', 'email', 'sms', 'voice', 'mcp', 'api', 'inter
  * optional extras (`menu`/`order`/`quote`) that appear only when present.
  */
 export const CORE_CHANNELS = ['book', 'pay', 'support', 'ask', 'website'];
-
-/** Default value emitted in `manifest.resilience.registry`. */
-export const DEFAULT_REGISTRY = 'https://bpub.app';

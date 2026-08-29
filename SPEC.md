@@ -1,7 +1,11 @@
 # nostr-bpub-utilities — a signed business manifest
 
-Build a machine-readable business manifest, bind it to a Nostr identity and on-chain
-receiving keys, and sign it so anyone can verify it without trusting a host.
+An open, host-agnostic standard and toolkit for **any Nostr platform where an `npub`
+represents a business entity**: build a machine-readable business manifest, bind it to a
+Nostr identity and receiving keys, and sign it so anyone can verify it without trusting
+the host that serves it. The standard says *what* the manifest is; the builder leaves
+every *how* — which domain, which registry — to the adopting platform, which supplies its
+own host (see `hostBase`). No product is privileged; nothing is estate-specific.
 
 > Status: **DRAFT 0.1** · Schema license: **CC BY 4.0** · Composes: `nostr-agentic-identity`
 > (the `npub`), `nostr-zpub-utilities` (the receiving `zpub`), `@noble/curves` schnorr
@@ -13,6 +17,13 @@ receiving keys, and sign it so anyone can verify it without trusting a host.
 `buildBusinessManifest` / `validateBusinessManifest` / `linksToChannels` produce and
 check the `bpub-business/0.1` manifest: identity, branding, hours, and verb-typed
 `channels` (`book / pay / support / ask`). Pure data transforms, no keys.
+
+**Host-agnostic by design.** The builder never fabricates or hardcodes a domain. The
+adopting platform supplies its own host via `hostBase` (a bare host like `"acme.example"`):
+when a `slug` is given but no explicit `page`, the page is derived as
+`https://${slug}.${hostBase}`, and `resilience.registry` defaults to `https://${hostBase}`.
+An explicit `page`/`registry` overrides. With neither `page` nor `hostBase`, `page` is
+`null` and `registry` is omitted — the library invents nothing.
 
 ### Layer 2 — the signature (makes the manifest verifiable)
 - `bindEntity(manifest, { npub, payAddress?, payAsset?, payVia? })` — sets

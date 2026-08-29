@@ -14,7 +14,14 @@ Initial release — build, validate, sign, and verify the `bpub-business/0.1` bu
 - **Layer 1 — the manifest (pure data, safe anywhere):**
   - `buildBusinessManifest(input)` — build a `bpub-business/0.1` manifest from a normalized record
     (identity, meta, branding, verb-typed `channels`, hours, resilience). TypeScript port of the original
-    implementation; its output is **byte-identical** to the original (pinned by the parity test).
+    implementation; for a given input its mapping is **byte-identical** to the original (pinned by the
+    parity test). **Host-agnostic:** the builder never hardcodes a domain. A new optional `hostBase` input
+    (a bare host like `"acme.example"`) derives `page = https://${slug}.${hostBase}` when a `slug` but no
+    explicit `page` is given, and seeds `resilience.registry = https://${hostBase}` when `registry` is
+    absent. With neither `page` nor `hostBase`, `page` is `null` and `registry` is omitted — no domain is
+    invented. (Intentional change from the original, which hardcoded a product host; adopters pass their own
+    host, so it does not affect callers that already supply `page`/`registry`.) The default `generated_by`
+    is now `"nostr-bpub-utilities"`.
   - `validateBusinessManifest(manifest)` — a fast, zero-dependency structural guard returning
     `{ valid, errors }`.
   - `linksToChannels(links, { pageUrl })` — map a flat `{ kind, url }` link list to verb-typed channels.

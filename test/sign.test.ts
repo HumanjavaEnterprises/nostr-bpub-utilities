@@ -21,7 +21,14 @@ import {
 import { SIGNER, OTHER_NPUB } from './vectors.mjs';
 
 function boundManifest() {
-  const base = buildBusinessManifest({ slug: 'joes', name: 'Joe’s Plumbing', verified: true });
+  // A caller-supplied hostBase gives the manifest a page (https://joes.example.com),
+  // from which the signed event's `d` tag (the slug) is derived.
+  const base = buildBusinessManifest({
+    slug: 'joes',
+    name: 'Joe’s Plumbing',
+    verified: true,
+    hostBase: 'example.com',
+  });
   return bindEntity(base, { npub: SIGNER.npub });
 }
 

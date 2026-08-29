@@ -1,14 +1,18 @@
 # nostr-bpub-utilities
 
-Build a machine-readable business manifest, bind it to a Nostr identity and on-chain
-receiving keys, and sign it so anyone can verify it without trusting a host.
+An open, host-agnostic library for **any Nostr platform where an `npub` represents a
+business entity** — build its manifest, bind identity and receiving keys, sign it, and
+verify it anywhere. Not tied to any one product: the library defines *what* the manifest
+is and keeps every decision about *how* (which domain, which registry) in the caller's
+hands, so each adopting platform supplies its own host.
 
-Part of the `nostr-*` utilities set: `nostr-agentic-identity` (identity), `nostr-zpub-utilities`
-(BTC/LTC receiving keys), and this — the business manifest.
+Part of the `nostr-*` utilities set: `nostr-agentic-identity` (identity),
+`nostr-zpub-utilities` (BTC/LTC receiving keys), and this — the business manifest.
 
-> The file an agent reads instead of emailing you: a business's identity and its
-> verb-typed, transactable **channels** (`book / pay / support / ask`), served at
-> `/.well-known/info.json` — and, optionally, signed by the business's own key.
+> The file an agent reads instead of emailing a business: its identity and its
+> verb-typed, transactable **channels** (`book / pay / support / ask`), typically served
+> at `/.well-known/info.json` — and, optionally, signed by the business's own key so any
+> party can verify it without trusting the host that serves it.
 
 ## Two layers
 
@@ -34,15 +38,22 @@ import { buildBusinessManifest, validateBusinessManifest } from 'nostr-bpub-util
 const manifest = buildBusinessManifest({
   slug: 'joes', name: "Joe's Plumbing", category: 'plumber', geo: 'toronto',
   languages: ['en', 'fr'],
+  hostBase: 'example.com', // YOUR platform's host — the page becomes https://joes.example.com
   links: [
-    { kind: 'website', url: 'https://joes.example' },
-    { kind: 'booking', url: 'https://book.joes' },
-    { kind: 'other',   url: 'mailto:hi@joes.example' }, // → channels.support
+    { kind: 'website', url: 'https://joes.example.com' },
+    { kind: 'booking', url: 'https://book.example.com/joes' },
+    { kind: 'other',   url: 'mailto:hi@joes.example.com' }, // → channels.support
   ],
 });
 
 const { valid, errors } = validateBusinessManifest(manifest);
 ```
+
+The library never fabricates a domain. Supply your own host with `hostBase` (a bare host
+like `"acme.example"`) and a `page` is derived from the `slug` as `https://${slug}.${hostBase}`;
+`resilience.registry` defaults to `https://${hostBase}`. Pass an explicit `page` and/or
+`registry` to set them directly. With none of these, `page` is `null` and `registry` is
+omitted — no host is invented.
 
 Sign it (enclave/client-side — the `nsec` is used and discarded):
 
@@ -71,6 +82,8 @@ const bound = bindEntity(manifest, { npub, payAddress, payAsset: 'BTC' });
 
 - `buildBusinessManifest(input)` → a `bpub-business/0.1` manifest. Accepts identity fields
   plus either `links:[{kind,url}]` (auto-mapped to channels) or explicit `channels:{}`.
+  Host is caller-supplied via `hostBase` (or an explicit `page`/`registry`); no domain is
+  ever hardcoded.
 - `linksToChannels(links, { pageUrl })` → the verb-typed channels map.
 - `validateBusinessManifest(m)` → `{ valid, errors }` (structural).
 - `bindEntity(manifest, { npub, payAddress?, payAsset?, payVia? })` → manifest with

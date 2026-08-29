@@ -31,11 +31,15 @@ const { SIGNER, OTHER_NPUB } = await import(
   pathToFileURL(resolve(root, 'test/vectors.mjs')).href
 );
 
+// Explicit page + registry + generated_by (as an adopting platform supplies them) keep
+// the TS output byte-identical to the legacy oracle, whose defaults changed this release.
 const INPUT = {
   slug: 'joes',
   name: 'Joe’s Plumbing',
   verified: true,
-  generated_by: 'test-emitter', // emitters pass this explicitly; keeps TS === legacy bytes
+  generated_by: 'test-emitter',
+  page: 'https://joes.example.com',
+  registry: 'https://registry.example.com',
   links: [
     { kind: 'website', url: 'https://joes.example.com' },
     { kind: 'pay', url: 'mailto:pay@joes.example.com' },
