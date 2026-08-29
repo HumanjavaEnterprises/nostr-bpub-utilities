@@ -1,6 +1,6 @@
 {
   "name": "nostr-business-manifest",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Build and validate the bpub-business/0.1 agent-readable business manifest, then sign it as a NIP-01 Nostr event with schnorr (BIP340) and verify it. The signing side is enclave/client-only and outputs PUBLIC material exclusively; the builder, validator, binding, and verifier are pure and safe anywhere. ESM + CommonJS.",
   "type": "module",
   "main": "./dist/index.js",
@@ -67,10 +67,10 @@
     "@scure/base": "2.3.0"
   },
   "peerDependencies": {
-    "nostr-zpub-utilities": "0.1.0"
+    "nostr-zpub-utils": "^0.1.0"
   },
   "peerDependenciesMeta": {
-    "nostr-zpub-utilities": {
+    "nostr-zpub-utils": {
       "optional": true
     }
   },

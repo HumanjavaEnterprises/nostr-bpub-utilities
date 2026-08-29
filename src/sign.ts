@@ -79,7 +79,7 @@ function looksExtendedKey(s: string): boolean {
  * business's entire receive-address chain. If `zpubBTC`/`zpubLTC` (or a `payAddress`
  * that is itself an extended key) is supplied, `bindEntity` THROWS a {@link BindingError}
  * and writes nothing — derive one address first with {@link deriveZpubAddress} (which
- * only works when the optional `nostr-zpub-utilities` peer is installed) and pass it
+ * only works when the optional `nostr-zpub-utils` peer is installed) and pass it
  * as `{ payAddress }`. Returns a NEW manifest — the input is not mutated.
  *
  * @param manifest - the manifest to bind
@@ -102,7 +102,7 @@ export function bindEntity(manifest: BusinessManifest, opts: BindOptions): Busin
       'bindEntity will not embed a raw extended public key (zpub/xpub) — it exposes the ' +
         'entire receive-address chain in a public, relayed manifest. Derive a single ' +
         'receiving address first (e.g. `await deriveZpubAddress(zpub, asset)`, which needs ' +
-        'the optional nostr-zpub-utilities peer) and pass it as { payAddress }. Nothing was written.',
+        'the optional nostr-zpub-utils peer) and pass it as { payAddress }. Nothing was written.',
     );
   }
 
@@ -146,7 +146,7 @@ export function bindEntity(manifest: BusinessManifest, opts: BindOptions): Busin
  * Derive a single receiving ADDRESS from an extended public key (`zpub`) — the safe
  * input for {@link bindEntity}'s `payAddress`.
  *
- * This is a convenience over the OPTIONAL `nostr-zpub-utilities` peer, loaded via a
+ * This is a convenience over the OPTIONAL `nostr-zpub-utils` peer, loaded via a
  * dynamic `import()` so it works in ESM and CJS and is absent-tolerant. If the peer
  * is not installed, it throws a clear {@link BindingError} — it NEVER returns the raw
  * `zpub`. Pure/public: no seed, no private key.
@@ -168,18 +168,18 @@ export async function deriveZpubAddress(
   try {
     // Indirect specifier: resolved only at runtime (the peer is optional and may be
     // absent), so neither tsc nor the bundler tries to hard-link it at build time.
-    const spec = 'nostr-zpub-utilities';
+    const spec = 'nostr-zpub-utils';
     peer = await import(/* @vite-ignore */ /* webpackIgnore: true */ spec);
   } catch {
     throw new BindingError(
-      'deriveZpubAddress requires the optional peer "nostr-zpub-utilities". Install it ' +
-        '(npm install nostr-zpub-utilities), or pass an already-derived address to ' +
+      'deriveZpubAddress requires the optional peer "nostr-zpub-utils". Install it ' +
+        '(npm install nostr-zpub-utils), or pass an already-derived address to ' +
         'bindEntity({ payAddress }).',
     );
   }
   const fn = peer?.zpubToAddress ?? peer?.default?.zpubToAddress;
   if (typeof fn !== 'function') {
-    throw new BindingError('nostr-zpub-utilities did not export zpubToAddress');
+    throw new BindingError('nostr-zpub-utils did not export zpubToAddress');
   }
   return fn(zpub, { asset, index: opts.index ?? 0, change: opts.change ?? 0 });
 }
