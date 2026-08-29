@@ -1,0 +1,22 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
+  "out": "docs",
+  "name": "nostr-bpub-utilities",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "theme": "default",
+  "readme": "README.md",
+  "categorizeByGroup": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/humanjavaenterprises/nostr-bpub-utilities",
+    "Spec": "https://github.com/humanjavaenterprises/nostr-bpub-utilities/blob/main/SPEC.md"
+  },
+  "validation": {
+    "invalidLink": true,
+    "notDocumented": false
+  }
+}

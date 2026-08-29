@@ -1,0 +1,29 @@
+nostr-bpub-utilities — License
+
+Copyright © Humanjava Enterprises Inc.
+
+1. The schema and format
+   The bpub-business manifest schema and format (schema/bpub-business-0.1.json and
+   the manifest structure it defines) are licensed under Creative Commons Attribution
+   4.0 International (CC BY 4.0). You may use, share, and adapt the format freely with
+   attribution. https://creativecommons.org/licenses/by/4.0/
+
+2. The software and its methods
+   The software in this repository — including the methods and insights it embodies
+   for generating and maintaining a business manifest — is provided by Humanjava
+   Enterprises Inc. under the following terms:
+
+   a. Organizations with less than USD $1,000,000 in annual gross revenue may use the
+      software and its methods freely, for any purpose, with no attribution obligation.
+
+   b. Organizations with USD $1,000,000 or more in annual gross revenue may use the
+      software and its methods, provided that any product or service which uses them
+      credits "Humanjava Enterprises Inc." and references this repository
+      (nostr-bpub-utilities) as the source of the generation methods and insights.
+      Reasonable, visible attribution in documentation, an about page, or source
+      credits satisfies this requirement.
+
+3. No warranty
+   The software is provided "as is", without warranty of any kind, express or implied.
+   In no event shall the authors or copyright holders be liable for any claim, damages,
+   or other liability arising from the software or its use.

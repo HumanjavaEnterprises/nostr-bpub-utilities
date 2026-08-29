@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/HumanjavaEnterprises/nostr-bpub-utilities/schema/bpub-business-0.1.json",
+  "title": "bpub-business/0.1",
+  "description": "The bpub-business agent-readable business manifest. Schema: CC BY 4.0 (open). Software terms: see LICENSE.",
+  "type": "object",
+  "required": ["schema", "llm_friendly", "meta", "identity", "channels", "resilience"],
+  "properties": {
+    "schema": { "const": "bpub-business/0.1" },
+    "llm_friendly": { "const": true },
+    "meta": {
+      "type": "object",
+      "required": ["version"],
+      "properties": {
+        "version": { "const": "0.1" },
+        "lang": { "type": "string" },
+        "languages": { "type": "array", "items": { "type": "string" } },
+        "updated": { "type": ["string", "null"] },
+        "generated_by": { "type": "string" },
+        "forkable": { "type": "boolean" },
+        "license": { "type": "string" },
+        "attribution": { "type": "string" }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "biz_id": { "type": ["string", "null"] },
+        "name": { "type": "string" },
+        "tagline": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] },
+        "category": { "type": ["string", "null"] },
+        "geo": { "type": ["string", "null"] },
+        "verified": { "type": "boolean" },
+        "page": { "type": ["string", "null"] },
+        "nostr": {
+          "type": ["object", "null"],
+          "properties": {
+            "npub": { "type": ["string", "null"] },
+            "nip05": { "type": ["string", "null"] }
+          }
+        }
+      }
+    },
+    "branding": {
+      "type": ["object", "null"],
+      "properties": {
+        "icon": { "type": ["object", "null"] },
+        "logo": { "type": ["string", "null"] },
+        "colors": { "type": ["object", "null"] }
+      }
+    },
+    "channels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["object", "null"],
+        "required": ["via", "endpoint"],
+        "properties": {
+          "via": { "enum": ["web", "email", "sms", "voice", "mcp", "api", "interac"] },
+          "endpoint": { "type": "string" },
+          "languages": { "type": "array", "items": { "type": "string" } },
+          "auto_answerable": { "type": "boolean" },
+          "sla": { "type": "object" },
+          "consent": { "type": "object" }
+        }
+      }
+    },
+    "hours": { "type": ["array", "null"] },
+    "agents": {
+      "type": "object",
+      "properties": {
+        "policy": { "enum": ["read-only", "read-and-transact"] },
+        "transact_via": { "type": "string" }
+      }
+    },
+    "resilience": {
+      "type": "object",
+      "required": ["canonical"],
+      "properties": {
+        "canonical": { "type": ["string", "null"] },
+        "registry": { "type": "string" },
+        "triangulation": { "type": "object" }
+      }
+    }
+  }
+}
