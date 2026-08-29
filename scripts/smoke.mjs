@@ -63,7 +63,7 @@ function check(label, description, actual, expected) {
   }
 }
 
-console.log('nostr-bpub-utilities — smoke test over the BUILT dist');
+console.log('nostr-business-manifest — smoke test over the BUILT dist');
 console.log(`  targets: ${targets.map((t) => t.label.split(' ')[0]).join(', ')}`);
 console.log('');
 

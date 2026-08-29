@@ -11,7 +11,7 @@ We release patches for security vulnerabilities. Which versions are eligible for
 
 ## Threat model — the private-key boundary is the whole safety of this library
 
-`nostr-bpub-utilities` builds a business manifest and signs it as a Nostr event. Its safety rests on one boundary:
+`nostr-business-manifest` builds a business manifest and signs it as a Nostr event. Its safety rests on one boundary:
 
 - **`signManifest` is the ONLY function that touches a private key, and it is ENCLAVE/CLIENT-ONLY.**
   It accepts an `nsec` (bech32 or 64-char hex), uses it to derive the public key and produce the schnorr
@@ -39,7 +39,7 @@ is an optional peer used only by `bindEntity`.
 
 ## Reporting a Vulnerability
 
-Please report security vulnerabilities through GitHub's Security Advisory feature at [https://github.com/humanjavaenterprises/nostr-bpub-utilities/security/advisories/new](https://github.com/humanjavaenterprises/nostr-bpub-utilities/security/advisories/new).
+Please report security vulnerabilities through GitHub's Security Advisory feature at [https://github.com/humanjavaenterprises/nostr-business-manifest/security/advisories/new](https://github.com/humanjavaenterprises/nostr-business-manifest/security/advisories/new).
 
 The team will acknowledge your report within 48 hours, and will send a more detailed response within 72 hours indicating the next steps in handling your report.
 

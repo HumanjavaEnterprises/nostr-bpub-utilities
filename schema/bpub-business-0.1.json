@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/HumanjavaEnterprises/nostr-bpub-utilities/schema/bpub-business-0.1.json",
+  "$id": "https://github.com/HumanjavaEnterprises/nostr-business-manifest/schema/bpub-business-0.1.json",
   "title": "bpub-business/0.1",
   "description": "The bpub-business agent-readable business manifest. Schema: CC BY 4.0 (open). Software terms: see LICENSE.",
   "type": "object",

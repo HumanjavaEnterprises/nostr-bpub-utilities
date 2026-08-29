@@ -6,12 +6,12 @@ export const VERSION = '0.1';
 
 export const LICENSE =
   'Schema: CC BY 4.0 (open). Methods: free under USD $1M annual revenue; ' +
-  'at or above $1M, credit Humanjava Enterprises Inc. and the nostr-bpub-utilities repository.';
+  'at or above $1M, credit Humanjava Enterprises Inc. and the nostr-business-manifest repository.';
 export const ATTRIBUTION_NOTICE =
   'The bpub-business schema is open (CC BY 4.0). The generation methods are provided by ' +
   'Humanjava Enterprises Inc.: free for organizations under USD $1M annual gross revenue; ' +
   'organizations at or above $1M attribute Humanjava Enterprises Inc. and the ' +
-  'nostr-bpub-utilities repository. See LICENSE.';
+  'nostr-business-manifest repository. See LICENSE.';
 
 // Verb-typed channels (the agentic transaction surface) + their transports.
 // `interac` = Interac e-Transfer (endpoint is an email address or phone number) — a

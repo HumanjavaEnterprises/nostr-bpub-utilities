@@ -1,17 +1,17 @@
 {
-  "name": "nostr-bpub-utilities",
+  "name": "nostr-business-manifest",
   "version": "0.1.0",
   "description": "Build and validate the bpub-business/0.1 agent-readable business manifest, then sign it as a NIP-01 Nostr event with schnorr (BIP340) and verify it. The signing side is enclave/client-only and outputs PUBLIC material exclusively; the builder, validator, binding, and verifier are pure and safe anywhere. ESM + CommonJS.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "browser": "./dist/browser/nostr-bpub-utilities.min.js",
+  "browser": "./dist/browser/nostr-business-manifest.min.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "workerd": "./dist/index.js",
       "worker": "./dist/index.js",
-      "browser": "./dist/browser/nostr-bpub-utilities.min.js",
+      "browser": "./dist/browser/nostr-business-manifest.min.js",
       "import": "./dist/index.js",
       "require": "./dist/cjs/index.js"
     },
@@ -38,7 +38,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/humanjavaenterprises/nostr-bpub-utilities.git"
+    "url": "git+https://github.com/humanjavaenterprises/nostr-business-manifest.git"
   },
   "keywords": [
     "nostr",
@@ -58,9 +58,9 @@
   "author": "vveerrgg",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/humanjavaenterprises/nostr-bpub-utilities/issues"
+    "url": "https://github.com/humanjavaenterprises/nostr-business-manifest/issues"
   },
-  "homepage": "https://github.com/humanjavaenterprises/nostr-bpub-utilities#readme",
+  "homepage": "https://github.com/humanjavaenterprises/nostr-business-manifest#readme",
   "dependencies": {
     "@noble/curves": "2.3.0",
     "@noble/hashes": "2.3.0",

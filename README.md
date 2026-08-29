@@ -1,4 +1,4 @@
-# nostr-bpub-utilities
+# nostr-business-manifest
 
 An open, host-agnostic library for **any Nostr platform where an `npub` represents a
 business entity** — build its manifest, bind identity and receiving keys, sign it, and
@@ -27,13 +27,13 @@ that the manifest claims the same identity that signed it.
 ## Install
 
 ```sh
-npm i nostr-bpub-utilities
+npm i nostr-business-manifest
 ```
 
 ## Use
 
 ```js
-import { buildBusinessManifest, validateBusinessManifest } from 'nostr-bpub-utilities';
+import { buildBusinessManifest, validateBusinessManifest } from 'nostr-business-manifest';
 
 const manifest = buildBusinessManifest({
   slug: 'joes', name: "Joe's Plumbing", category: 'plumber', geo: 'toronto',
@@ -58,7 +58,7 @@ omitted — no host is invented.
 Sign it (enclave/client-side — the `nsec` is used and discarded):
 
 ```js
-import { bindEntity, signManifest, verifyManifest } from 'nostr-bpub-utilities';
+import { bindEntity, signManifest, verifyManifest } from 'nostr-business-manifest';
 
 // Pass a pre-derived receiving ADDRESS (recommended). Never a raw zpub — bindEntity
 // refuses to embed one, since a zpub exposes the whole receive-address chain.
@@ -73,7 +73,7 @@ To turn a `zpub` into a single address first (needs the optional `nostr-zpub-uti
 peer), use `deriveZpubAddress`:
 
 ```js
-import { deriveZpubAddress, bindEntity } from 'nostr-bpub-utilities';
+import { deriveZpubAddress, bindEntity } from 'nostr-business-manifest';
 const payAddress = await deriveZpubAddress(zpubBTC, 'BTC'); // throws if the peer is absent
 const bound = bindEntity(manifest, { npub, payAddress, payAsset: 'BTC' });
 ```
@@ -125,4 +125,4 @@ Two parts, licensed separately (see [`LICENSE`](./LICENSE)):
 - **The software / generation methods** — fair-code: free for organizations with less
   than **USD $1M** annual gross revenue; organizations at or above $1M may use it provided
   they credit **Humanjava Enterprises Inc.** and reference this repository
-  (`nostr-bpub-utilities`) as the source of the methods.
+  (`nostr-business-manifest`) as the source of the methods.

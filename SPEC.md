@@ -1,4 +1,4 @@
-# nostr-bpub-utilities — a signed business manifest
+# nostr-business-manifest — a signed business manifest
 
 An open, host-agnostic standard and toolkit for **any Nostr platform where an `npub`
 represents a business entity**: build a machine-readable business manifest, bind it to a
@@ -68,7 +68,7 @@ or appears in any return value or error.
 - **Schnorr correctness** — signatures verify against a known NIP-01 / BIP-340 vector.
 
 ## Conventions
-Unscoped package `nostr-bpub-utilities` · TypeScript dual ESM/CJS + browser build · vitest ·
+Unscoped package `nostr-business-manifest` · TypeScript dual ESM/CJS + browser build · vitest ·
 eslint / prettier · typedoc. Runtime deps: `@noble/hashes`, `@noble/curves`, `@scure/base`
 (schnorr + bech32). `nostr-zpub-utilities` is an optional peer used only by `bindEntity`.
 

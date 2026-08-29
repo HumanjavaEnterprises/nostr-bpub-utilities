@@ -21,7 +21,7 @@ Initial release — build, validate, sign, and verify the `bpub-business/0.1` bu
     absent. With neither `page` nor `hostBase`, `page` is `null` and `registry` is omitted — no domain is
     invented. (Intentional change from the original, which hardcoded a product host; adopters pass their own
     host, so it does not affect callers that already supply `page`/`registry`.) The default `generated_by`
-    is now `"nostr-bpub-utilities"`.
+    is now `"nostr-business-manifest"`.
   - `validateBusinessManifest(manifest)` — a fast, zero-dependency structural guard returning
     `{ valid, errors }`.
   - `linksToChannels(links, { pageUrl })` — map a flat `{ kind, url }` link list to verb-typed channels.

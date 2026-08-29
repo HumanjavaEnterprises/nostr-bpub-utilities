@@ -9,7 +9,7 @@ const result = await build({
   sourcesContent: false,
   format: 'iife',
   globalName: 'NostrBpubUtilities',
-  outfile: 'dist/browser/nostr-bpub-utilities.min.js',
+  outfile: 'dist/browser/nostr-business-manifest.min.js',
   target: ['es2020'],
   platform: 'browser',
   // The optional peer is resolved at runtime via dynamic import(); never bundled.

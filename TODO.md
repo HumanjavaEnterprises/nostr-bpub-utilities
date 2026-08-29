@@ -1,9 +1,9 @@
-# TODO — nostr-bpub-utilities
+# TODO — nostr-business-manifest
 
 ## Before first npm publish
 
-- [ ] Confirm the npm package name `nostr-bpub-utilities` is available / reserved.
-- [ ] Verify the `HumanjavaEnterprises/nostr-bpub-utilities` GitHub repo, CI badge slug (`ci.yml`), and
+- [ ] Confirm the npm package name `nostr-business-manifest` is available / reserved.
+- [ ] Verify the `HumanjavaEnterprises/nostr-business-manifest` GitHub repo, CI badge slug (`ci.yml`), and
       security-advisory link are correct.
 - [ ] Publish `nostr-zpub-utilities` (the optional peer) so `bindEntity`'s zpub → address derivation resolves
       when installed; until then `bindEntity` carries the zpub through unchanged.

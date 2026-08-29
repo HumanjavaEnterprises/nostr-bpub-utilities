@@ -151,11 +151,11 @@ describe('builder parity — TS port === legacy JS (byte-identical)', () => {
     expect(m.meta.license).toBe(LICENSE);
   });
 
-  it('default generated_by is "nostr-bpub-utilities" (intentional change from "info-json")', () => {
+  it('default generated_by is "nostr-business-manifest" (intentional change from "info-json")', () => {
     // The new default. Emitters always pass generated_by explicitly, so this change
     // does not affect them — hence the parity fixtures above all set it explicitly.
-    expect(buildBusinessManifest({}).meta.generated_by).toBe('nostr-bpub-utilities');
-    expect(buildBusinessManifest({ name: 'X' }).meta.generated_by).toBe('nostr-bpub-utilities');
+    expect(buildBusinessManifest({}).meta.generated_by).toBe('nostr-business-manifest');
+    expect(buildBusinessManifest({ name: 'X' }).meta.generated_by).toBe('nostr-business-manifest');
     // The preserved legacy oracle still shows the old default — documenting the change.
     expect(legacy.buildBusinessManifest({}).meta.generated_by).toBe('info-json');
     // With page + registry + generated_by supplied explicitly (as adopters do), the two

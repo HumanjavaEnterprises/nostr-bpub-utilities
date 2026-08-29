@@ -1,5 +1,5 @@
 /**
- * nostr-bpub-utilities — build, validate, sign, and verify the `bpub-business/0.1`
+ * nostr-business-manifest — build, validate, sign, and verify the `bpub-business/0.1`
  * business manifest.
  *
  * Two layers:

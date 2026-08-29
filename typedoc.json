@@ -2,7 +2,7 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": ["./src/index.ts"],
   "out": "docs",
-  "name": "nostr-bpub-utilities",
+  "name": "nostr-business-manifest",
   "includeVersion": true,
   "excludePrivate": true,
   "excludeProtected": true,
@@ -12,8 +12,8 @@
   "readme": "README.md",
   "categorizeByGroup": true,
   "navigationLinks": {
-    "GitHub": "https://github.com/humanjavaenterprises/nostr-bpub-utilities",
-    "Spec": "https://github.com/humanjavaenterprises/nostr-bpub-utilities/blob/main/SPEC.md"
+    "GitHub": "https://github.com/humanjavaenterprises/nostr-business-manifest",
+    "Spec": "https://github.com/humanjavaenterprises/nostr-business-manifest/blob/main/SPEC.md"
   },
   "validation": {
     "invalidLink": true,

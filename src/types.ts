@@ -1,5 +1,5 @@
 /**
- * Public types for nostr-bpub-utilities.
+ * Public types for nostr-business-manifest.
  *
  * Two groups: the manifest shapes ({@link BusinessManifest} and its parts, plus the
  * {@link BuildInput} the builder accepts) and the Nostr signing shapes
